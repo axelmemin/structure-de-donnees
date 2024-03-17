@@ -40,14 +40,13 @@ def scrabble(tirage):
             mots_possibles.append(liste[i])
     for z in range(len(mots_possibles)):
         if score(mots_possibles[z])>score(solution):
-            solution=mots_possibles[z]
+            solution=(mots_possibles[z],score(mots_possibles[z]))
     #print(mots_possibles, solution)
     return mots_possibles, solution
     
 def scrabble2(tirage):
     if '?' in tirage:
         potentiel=[]
-        solution=0
         intero=0
         for j in range(len(tirage)):
             if tirage[j]=='?':
@@ -64,21 +63,23 @@ def scrabble2(tirage):
                 potentiel.append((mot, alphabet[i],num))
             else:
                 potentiel.append((mot,alphabet[i],0)) 
+        solution=(potentiel[0][0],0)
         for z in range(len(potentiel)):
             if potentiel[z][2]==0:
-                if score(potentiel[z])-score(potentiel[z][1])>score(solution):
-                    solution=potentiel[z][0]
+                if score(potentiel[z][0])-score(potentiel[z][1])>score(solution[0]):
+                    solution=(potentiel[z][0],score(potentiel[z][0])-score(potentiel[z][1]))
             else:                                       #cas lettre prise par '?' est déjà dans le tirage
                 num=potentiel[z][2]
                 for h in range(len(potentiel[z][0])):
                     if potentiel[z][0][h]==potentiel[z][1]:
                         num=num-1
-                        if score(potentiel[z])-abs(num)*score(potentiel[z][1])>score(solution):
-                            solution=potentiel[z][0]
-        print(solution)                
-        return solution
+                        if score(potentiel[z][0])-abs(num)*score(potentiel[z][1])>score(solution[0]):
+                            solution=(potentiel[z][0],score(potentiel[z][0])-abs(num)*score(potentiel[z][1]))
+        print(solution[0][0],solution[1])                
+        return solution[0][0],solution[1]
     else:
         print(scrabble(tirage)[1])
         return scrabble(tirage)[1]
 
+scrabble2(['a', 'r', 'b', 'g', 'e', 's', 'c', 'j','?'])
 scrabble2(['c','a','v','e','l','y','o','?'])
